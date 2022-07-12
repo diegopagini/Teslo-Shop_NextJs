@@ -2,6 +2,8 @@
 import Head from 'next/head';
 import React, { FC } from 'react';
 
+import { Navbar } from '../ui';
+
 interface Props {
 	title: string;
 	pageDescription: string;
@@ -25,7 +27,9 @@ export const ShopLayout: FC<Props> = ({
 				{imageFullUrl && <meta name='og:image' content={imageFullUrl} />}
 			</Head>
 
-			<nav>{/* TODO: Navbar */}</nav>
+			<nav>
+				<Navbar></Navbar>
+			</nav>
 
 			{/* TODO: Sidebar */}
 
