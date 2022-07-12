@@ -28,10 +28,7 @@ const ProductPage = () => {
 						<Box sx={{ my: 2 }}>
 							<Typography variant='subtitle2'>Cantidad</Typography>
 							<ItemCounter />
-							<SizeSelector
-								selectedSize={product.sizes[0]}
-								sizes={product.sizes}
-							/>
+							<SizeSelector sizes={product.sizes} />
 						</Box>
 
 						<Button color='secondary' className='circular-btn'>
