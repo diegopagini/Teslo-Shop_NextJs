@@ -2,7 +2,6 @@
 import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
 import { AppBar, Badge, Box, Button, IconButton, Link, Toolbar, Typography } from '@mui/material';
 import NextLink from 'next/link';
-import React from 'react';
 
 export const Navbar = () => {
 	return (
