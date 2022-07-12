@@ -1,0 +1,9 @@
+/** @format */
+
+.each-slide > div {
+	background-size: contain;
+	background-position: center;
+	display: flex;
+	height: 650px;
+	justify-content: center;
+}
