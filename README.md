@@ -29,7 +29,7 @@ yarn dev
 
 ## Llenar la base de datos con infromación de pruebas
 
-Llamara:
+Llamar a:
 
 ```
 http://localhost:3000/api/seed
