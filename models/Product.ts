@@ -3,6 +3,7 @@ import mongoose, { Model, model, Schema } from 'mongoose';
 
 import { IProduct } from '../interfaces';
 
+
 const productSchema = new Schema(
 	{
 		description: { type: String, required: true },
@@ -22,19 +23,17 @@ const productSchema = new Schema(
 		tags: [{ type: String }],
 		title: { type: String, required: true },
 		type: {
-			type: {
-				String,
-				enum: {
-					values: ['shirts', 'pants', 'hoodies', 'hats'],
-					message: '{VALUE} no es un tipo válido',
-				},
+			type: String,
+			enum: {
+				values: ['shirts', 'pants', 'hoodies', 'hats'],
+				message: '{VALUE} no es un tipo válido',
 			},
-			gender: {
-				type: String,
-				enum: {
-					values: ['men', 'women', 'kid', 'unisex'],
-					message: '{VALUE} no es un tipo válido',
-				},
+		},
+		gender: {
+			type: String,
+			enum: {
+				values: ['men', 'women', 'kid', 'unisex'],
+				message: '{VALUE} no es un genero válido',
 			},
 		},
 	},
@@ -43,7 +42,7 @@ const productSchema = new Schema(
 	}
 );
 
-//TODO: crear indice de Mongo
+productSchema.index({ title: 'text', tags: 'text' });
 
 const Product: Model<IProduct> =
 	mongoose.models.Product || model('Product', productSchema);
