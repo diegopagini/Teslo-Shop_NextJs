@@ -1,3 +1,3 @@
 /** @format */
 
-export * from './products.interface';
+export { default as Product } from './Porduct';

@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 import { ShopLayout } from '../components/layouts';
 import { ProductList } from '../components/products';
 import { initialData } from '../database/products';
-import { IProduct } from '../models/products.interface';
+import { IProduct } from '../interfaces/products.interface';
 
 import type { NextPage } from 'next';
 const Home: NextPage = () => {

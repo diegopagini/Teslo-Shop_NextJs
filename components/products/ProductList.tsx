@@ -2,7 +2,7 @@
 import { Grid } from '@mui/material';
 import React, { FC } from 'react';
 
-import { IProduct } from '../../models';
+import { IProduct } from '../../interfaces';
 import { ProductCard } from './ProductCard';
 
 interface Props {

@@ -3,7 +3,7 @@ import { Box, Card, CardActionArea, CardMedia, Grid, Link, Typography } from '@m
 import NextLink from 'next/link';
 import React, { FC, useMemo, useState } from 'react';
 
-import { IProduct } from '../../models';
+import { IProduct } from '../../interfaces';
 
 interface Props {
 	product: IProduct;
