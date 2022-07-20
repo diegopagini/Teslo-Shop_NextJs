@@ -3,11 +3,13 @@ import { Typography } from '@mui/material';
 
 import { ShopLayout } from '../components/layouts';
 import { ProductList } from '../components/products';
-import { initialData } from '../database/products';
-import { IProduct } from '../interfaces/products.interface';
+import { useProducts } from '../hooks';
 
 import type { NextPage } from 'next';
-const Home: NextPage = () => {
+
+const HomePage: NextPage = () => {
+	const { products, isLoading } = useProducts(`/products`);
+
 	return (
 		<ShopLayout
 			title={'Tesla-Shop - Home'}
@@ -20,9 +22,9 @@ const Home: NextPage = () => {
 				Todos los productos
 			</Typography>
 
-			<ProductList products={initialData.products as IProduct[]} />
+			{isLoading ? <h1>Cargando...</h1> : <ProductList products={products} />}
 		</ShopLayout>
 	);
 };
 
-export default Home;
+export default HomePage;
