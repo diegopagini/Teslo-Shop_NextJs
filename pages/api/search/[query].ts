@@ -4,6 +4,7 @@ import { IProduct } from '../../../interfaces';
 import { Product } from '../../../models';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
+
 type Data = { message: string } | IProduct[];
 
 export default async function handler(
@@ -38,7 +39,9 @@ const searchProducts = async (
 
 	const products = await Product.find({
 		$text: { $search: query }, // Se hace de esta forma gracias a mongoose.
-	}).lean();
+	})
+		.select('title images price inStock slug -_id') // Para elejir las propiedades que mostraremos del producto.
+		.lean();
 
 	await db.disconnect();
 
