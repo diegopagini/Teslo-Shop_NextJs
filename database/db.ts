@@ -1,7 +1,6 @@
 /** @format */
 import mongoose from 'mongoose';
 
-
 /**
  * 0 = disconnected
  * 1 = connected

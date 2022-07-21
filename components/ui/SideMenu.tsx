@@ -25,13 +25,20 @@ import {
   ListSubheader,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import { UiContext } from '../../context';
 
 export const SideMenu = () => {
 	const { isMenuOpen, toggleSideMenu } = useContext(UiContext);
 	const router = useRouter();
+
+	const [searchTerm, setSearchTerm] = useState('');
+
+	const onSearchTerm = () => {
+		if (searchTerm.trim().length === 0) return;
+		navigateTo(`/search/${searchTerm}`);
+	};
 
 	const navigateTo = (url: string) => {
 		toggleSideMenu();
@@ -50,6 +57,9 @@ export const SideMenu = () => {
 						<Input
 							type='text'
 							placeholder='Buscar...'
+							value={searchTerm}
+							onChange={(e) => setSearchTerm(e.target.value)}
+							onKeyPress={(e) => (e.key === 'Enter' ? onSearchTerm() : null)}
 							endAdornment={
 								<InputAdornment position='end'>
 									<IconButton aria-label='toggle password visibility'>
