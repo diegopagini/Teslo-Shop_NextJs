@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		<SWRConfig
 			value={{
 				fetcher: (resource, init) =>
-					fetch(resource, init).then((res) => res.json()),
+					fetch(resource, init).then((res) => res.json()), // SWR config with fetch.
 			}}>
 			<ThemeProvider theme={lightTheme}>
 				<CssBaseline />
