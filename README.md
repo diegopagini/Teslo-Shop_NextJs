@@ -20,7 +20,7 @@ mongodb://localhost:27017/teslodb
 
 Renombrar el archivo **.env.template** a **.env**
 
-## Reconstrutir los módulos de node y levantar Next
+## Reconstrutir los módulos de node y levantar Next en dev mode
 
 ```
 yarn install
@@ -33,4 +33,11 @@ Llamar a:
 
 ```
 http://localhost:3000/api/seed
+```
+
+## Crear la version de producción
+
+```
+yarn build
+yarn start
 ```
