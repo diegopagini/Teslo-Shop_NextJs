@@ -4,6 +4,7 @@ import '../styles/globals.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { SWRConfig } from 'swr';
 
+import { UiProvider } from '../context';
 import { lightTheme } from '../themes/light-theme';
 
 import type { AppProps } from 'next/app';
@@ -14,10 +15,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 				fetcher: (resource, init) =>
 					fetch(resource, init).then((res) => res.json()), // SWR config with fetch.
 			}}>
-			<ThemeProvider theme={lightTheme}>
-				<CssBaseline />
-				<Component {...pageProps} />
-			</ThemeProvider>
+			<UiProvider>
+				<ThemeProvider theme={lightTheme}>
+					<CssBaseline />
+					<Component {...pageProps} />
+				</ThemeProvider>
+			</UiProvider>
 		</SWRConfig>
 	);
 }
