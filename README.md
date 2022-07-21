@@ -20,7 +20,7 @@ mongodb://localhost:27017/teslodb
 
 Renombrar el archivo **.env.template** a **.env**
 
-## Reconstrutir los módulos de node y levantar Next
+## Reconstrutir los módulos de node y levantar Next en dev mode
 
 ```
 yarn install
