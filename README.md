@@ -34,3 +34,10 @@ Llamar a:
 ```
 http://localhost:3000/api/seed
 ```
+
+## Crear la version de producción
+
+```
+yarn build
+yarn start
+```
