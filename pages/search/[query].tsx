@@ -25,15 +25,15 @@ const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
 			</Typography>
 
 			{foundProducts ? (
-				<Typography variant='h2' sx={{ mb: 1 }}>
-					{query}
+				<Typography variant='h2' sx={{ mb: 1 }} textTransform='capitalize'>
+					Término: {query}
 				</Typography>
 			) : (
 				<Box display='flex'>
 					<Typography variant='h2' sx={{ mb: 1 }}>
 						No encontramos un ningún producto
 					</Typography>
-					<Typography variant='h2' sx={{ ml: 1 }} color='secondary'>
+					<Typography variant='h2' sx={{ ml: 1 }} color='secondary' textTransform='capitalize'>
 						{query}
 					</Typography>
 				</Box>
