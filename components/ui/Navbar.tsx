@@ -52,7 +52,7 @@ export const Navbar = () => {
 
 				<Box flex={1} />
 
-				<IconButton>
+				<IconButton onClick={toggleSideMenu}>
 					<SearchOutlined />
 				</IconButton>
 
