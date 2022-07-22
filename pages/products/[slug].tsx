@@ -1,11 +1,13 @@
 /** @format */
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useContext, useState } from 'react';
 
 import { ShopLayout } from '../../components/layouts';
 import { ProductSlideshow, SizeSelector } from '../../components/products';
-import { ItemCounter } from '../../components/ui/ItemCounter';
+import { ItemCounter } from '../../components/ui';
+import { CartContext } from '../../context';
 import { dbProducts } from '../../database';
 import { ICartProduct, IProduct, ISize } from '../../interfaces';
 
@@ -14,6 +16,10 @@ interface Props {
 }
 
 const ProductPage: NextPage<Props> = ({ product }) => {
+	const router = useRouter();
+
+	const { addProductToCar } = useContext(CartContext);
+
 	const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
 		_id: product._id,
 		image: product.images[0],
@@ -28,6 +34,18 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 	const onSelectSize = (size: ISize) => {
 		// To update we need to use always the setter of useState
 		setTempCartProduct((currentProduct) => ({ ...currentProduct, size }));
+	};
+
+	const onUpdateQuantity = (quantity: number) => {
+		setTempCartProduct((currentProduct) => ({ ...currentProduct, quantity }));
+	};
+
+	const onAddProduct = () => {
+		if (!tempCartProduct.size) {
+			return;
+		}
+		addProductToCar(tempCartProduct);
+		router.push('/cart');
 	};
 
 	return (
@@ -48,7 +66,13 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 						{/* Cantidad */}
 						<Box sx={{ my: 2 }}>
 							<Typography variant='subtitle2'>Cantidad</Typography>
-							<ItemCounter />
+
+							<ItemCounter
+								currentValue={tempCartProduct.quantity}
+								updateQuantity={(value) => onUpdateQuantity(value)}
+								maxValue={product.inStock > 5 ? 5 : product.inStock}
+							/>
+
 							<SizeSelector
 								selectedSize={tempCartProduct.size}
 								sizes={product.sizes}
@@ -60,7 +84,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 
 						{/* Agregar al carrito */}
 						{product.inStock > 0 ? (
-							<Button color='secondary' className='circular-btn'>
+							<Button color='secondary' className='circular-btn' onClick={onAddProduct}>
 								{tempCartProduct.size ? 'Agregar al carrito' : 'Seleccione una talla'}
 							</Button>
 						) : (
