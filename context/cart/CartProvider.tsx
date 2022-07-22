@@ -20,8 +20,13 @@ export const CartProvider: FC<Props> = ({ children }) => {
 	const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
 
 	useEffect(() => {
-		const cookieProducts = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!) : [];
-		dispatch({ type: '[Cart] - LoadCart from cookies | storage', payload: cookieProducts });
+		// Solo en caso de que alguien manipule manualente la Cookie desde el navegador
+		try {
+			const cookieProducts = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!) : [];
+			dispatch({ type: '[Cart] - LoadCart from cookies | storage', payload: cookieProducts });
+		} catch (error) {
+			dispatch({ type: '[Cart] - LoadCart from cookies | storage', payload: [] });
+		}
 	}, []); // Si no se tienen dependencias se ejecuta una única vez.
 
 	useEffect(() => {

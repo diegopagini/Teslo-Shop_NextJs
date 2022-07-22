@@ -1,33 +1,29 @@
 /** @format */
 import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from '@mui/material';
 import NextLink from 'next/link';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 
-import { initialData } from '../../database/products';
+import { CartContext } from '../../context';
+import { ICartProduct } from '../../interfaces';
 import { ItemCounter } from '../ui';
-
-const productsInCart = [
-	initialData.products[0],
-	initialData.products[1],
-	initialData.products[2],
-];
 
 interface Props {
 	editable?: boolean;
 }
 
 export const CardList: FC<Props> = ({ editable = false }) => {
+	const { cart } = useContext(CartContext);
+
 	return (
 		<>
-			{productsInCart.map((product) => (
+			{cart.map((product: ICartProduct) => (
 				<Grid container spacing={2} key={product.slug} sx={{ mb: 1 }}>
 					<Grid item xs={3}>
-						{/* TODO: llevar a la pagina del producto */}
 						<NextLink href='/products/slug' passHref>
 							<Link>
 								<CardActionArea>
 									<CardMedia
-										image={`/products/${product.images[0]}`}
+										image={`/products/${product.image}`}
 										component='img'
 										sx={{ boderRadius: '5px' }}
 									/>
@@ -39,22 +35,23 @@ export const CardList: FC<Props> = ({ editable = false }) => {
 						<Box display='flex' flexDirection='column'>
 							<Typography variant='body1'>{product.title}</Typography>
 							<Typography variant='body1'>
-								Talla: <strong>M</strong>
+								Talla: <strong>{product.size}</strong>
 							</Typography>
 
 							{editable ? (
-								<ItemCounter />
+								<ItemCounter
+									currentValue={product.quantity}
+									maxValue={10}
+									updateQuantity={() => {}}
+								/>
 							) : (
-								<Typography variant='h4'>3 items</Typography>
+								<Typography variant='h4'>
+									{product.quantity} {product.quantity > 1 ? 'productos' : 'producto'}
+								</Typography>
 							)}
 						</Box>
 					</Grid>
-					<Grid
-						item
-						xs={2}
-						display='flex'
-						alignItems='center'
-						flexDirection='column'>
+					<Grid item xs={2} display='flex' alignItems='center' flexDirection='column'>
 						<Typography variant='subtitle1'>${product.price}</Typography>
 
 						{editable && (
