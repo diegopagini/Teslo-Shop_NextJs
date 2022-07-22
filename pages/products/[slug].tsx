@@ -37,6 +37,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 	};
 
 	const onUpdateQuantity = (quantity: number) => {
+		// To update we need to use always the setter of useState
 		setTempCartProduct((currentProduct) => ({ ...currentProduct, quantity }));
 	};
 
