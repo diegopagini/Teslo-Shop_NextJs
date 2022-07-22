@@ -1,5 +1,5 @@
 /** @format */
-import { Box, Card, CardActionArea, CardMedia, Grid, Link, Typography } from '@mui/material';
+import { Box, Card, CardActionArea, CardMedia, Chip, Grid, Link, Typography } from '@mui/material';
 import NextLink from 'next/link';
 import React, { FC, useMemo, useState } from 'react';
 
@@ -14,9 +14,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
 	const [isImageLoaded, setIsImageLoaded] = useState(false);
 
 	const productImage = useMemo(() => {
-		return isHovered
-			? `/products/${product.images[1]}`
-			: `/products/${product.images[0]}`;
+		return isHovered ? `/products/${product.images[1]}` : `/products/${product.images[0]}`;
 	}, [isHovered, product.images]);
 
 	return (
@@ -30,6 +28,14 @@ export const ProductCard: FC<Props> = ({ product }) => {
 				<NextLink href={`/products/${product.slug}`} passHref prefetch={false}>
 					<Link>
 						<CardActionArea>
+							{product.inStock === 0 && (
+								<Chip
+									color='primary'
+									label='No hay disponibles'
+									sx={{ position: 'absolute', zIndex: 99, top: '1rem', left: '1rem' }}
+								/>
+							)}
+
 							<CardMedia
 								className='fadeIn'
 								component='img'
@@ -41,9 +47,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
 					</Link>
 				</NextLink>
 			</Card>
-			<Box
-				sx={{ mt: 1, display: isImageLoaded ? 'block' : 'none' }}
-				className='fadeIn'>
+			<Box sx={{ mt: 1, display: isImageLoaded ? 'block' : 'none' }} className='fadeIn'>
 				<Typography fontWeight={700}>{product.title}</Typography>
 				<Typography fontWeight={500}>${product.price}</Typography>
 			</Box>

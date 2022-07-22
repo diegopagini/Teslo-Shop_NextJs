@@ -1,20 +1,34 @@
 /** @format */
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import { useState } from 'react';
 
 import { ShopLayout } from '../../components/layouts';
 import { ProductSlideshow, SizeSelector } from '../../components/products';
 import { ItemCounter } from '../../components/ui/ItemCounter';
 import { dbProducts } from '../../database';
-import { IProduct } from '../../interfaces';
-
+import { ICartProduct, IProduct, ISize } from '../../interfaces';
 
 interface Props {
 	product: IProduct;
 }
 
 const ProductPage: NextPage<Props> = ({ product }) => {
+	const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
+		_id: product._id,
+		image: product.images[0],
+		price: product.price,
+		size: undefined,
+		slug: product.slug,
+		title: product.title,
+		gender: product.gender,
+		quantity: 1,
+	});
 
+	const onSelectSize = (size: ISize) => {
+		// To update we need to use always the setter of useState
+		setTempCartProduct((currentProduct) => ({ ...currentProduct, size }));
+	};
 
 	return (
 		<ShopLayout title={product.title} pageDescription={product.description}>
@@ -29,26 +43,29 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 						<Typography variant='h1' component='h1'>
 							{product.title}
 						</Typography>
-						<Typography
-							variant='subtitle1'
-							component='h2'>{`$${product.price}`}</Typography>
+						<Typography variant='subtitle1' component='h2'>{`$${product.price}`}</Typography>
 
 						{/* Cantidad */}
 						<Box sx={{ my: 2 }}>
 							<Typography variant='subtitle2'>Cantidad</Typography>
 							<ItemCounter />
 							<SizeSelector
-								// selectedSize={ product.sizes[2] }
+								selectedSize={tempCartProduct.size}
 								sizes={product.sizes}
+								onSelectedSize={(size) => onSelectSize(size)}
+								// onSelect Size={onSelect Size} if the first argument of a function is the same that in the
+								// function that we are calling, this could be deleted.
 							/>
 						</Box>
 
 						{/* Agregar al carrito */}
-						<Button color='secondary' className='circular-btn'>
-							Agregar al carrito
-						</Button>
-
-						{/* <Chip label="No hay disponibles" color="error" variant='outlined' /> */}
+						{product.inStock > 0 ? (
+							<Button color='secondary' className='circular-btn'>
+								{tempCartProduct.size ? 'Agregar al carrito' : 'Seleccione una talla'}
+							</Button>
+						) : (
+							<Chip label='No hay disponibles' color='error' variant='outlined' />
+						)}
 
 						{/* Descripción */}
 						<Box sx={{ mt: 3 }}>
