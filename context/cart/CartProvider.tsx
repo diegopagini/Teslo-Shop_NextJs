@@ -7,34 +7,61 @@ import { CartContext, cartReducer } from './';
 
 export interface CartState {
 	cart: ICartProduct[];
+	numberOfItems: number;
+	subTotal: number;
+	tax: number;
+	total: number;
 }
 
 const CART_INITIAL_STATE: CartState = {
 	cart: [],
+	numberOfItems: 0,
+	subTotal: 0,
+	tax: 0,
+	total: 0,
 };
 
 interface Props {
 	children: JSX.Element;
 }
+
 export const CartProvider: FC<Props> = ({ children }) => {
 	const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
 
+	// Efecto
 	useEffect(() => {
-		// Solo en caso de que alguien manipule manualente la Cookie desde el navegador
 		try {
 			const cookieProducts = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!) : [];
 			dispatch({ type: '[Cart] - LoadCart from cookies | storage', payload: cookieProducts });
 		} catch (error) {
 			dispatch({ type: '[Cart] - LoadCart from cookies | storage', payload: [] });
 		}
-	}, []); // Si no se tienen dependencias se ejecuta una única vez.
+	}, []);
 
 	useEffect(() => {
 		Cookie.set('cart', JSON.stringify(state.cart));
 	}, [state.cart]);
 
-	const addProductToCar = (product: ICartProduct) => {
-		const productInCart = state.cart.some((value: ICartProduct) => value._id === product._id);
+	useEffect(() => {
+		const numberOfItems = state.cart.reduce((prev, current) => current.quantity + prev, 0);
+		const subTotal = state.cart.reduce(
+			(prev, current) => current.price * current.quantity + prev,
+			0
+		);
+		const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE || 0);
+
+		const orderSummary = {
+			numberOfItems,
+			subTotal,
+			tax: subTotal * taxRate,
+			total: subTotal * (taxRate + 1),
+		};
+
+		dispatch({ type: '[Cart] - Update order summary', payload: orderSummary });
+	}, [state.cart]);
+
+	const addProductToCart = (product: ICartProduct) => {
+		const productInCart = state.cart.some((p) => p._id === product._id);
 		if (!productInCart)
 			return dispatch({
 				type: '[Cart] - Update products in cart',
@@ -42,7 +69,7 @@ export const CartProvider: FC<Props> = ({ children }) => {
 			});
 
 		const productInCartButDifferentSize = state.cart.some(
-			(value: ICartProduct) => value._id === product._id && value.size === product.size
+			(p: ICartProduct) => p._id === product._id && p.size === product.size
 		);
 		if (!productInCartButDifferentSize)
 			return dispatch({
@@ -51,23 +78,35 @@ export const CartProvider: FC<Props> = ({ children }) => {
 			});
 
 		// Acumular
-		const updatedProducts = state.cart.map((value: ICartProduct) => {
-			if (value._id !== product._id) return value;
-			if (value.size !== product.size) return value;
-			// Entonces actualizar la cantidad
-			value.quantity += product.quantity;
+		const updatedProducts = state.cart.map((p: ICartProduct) => {
+			if (p._id !== product._id) return p;
+			if (p.size !== product.size) return p;
 
-			return value;
+			// Actualizar la cantidad
+			p.quantity += product.quantity;
+			return p;
 		});
 
 		dispatch({ type: '[Cart] - Update products in cart', payload: updatedProducts });
+	};
+
+	const updateCartQuantity = (product: ICartProduct) => {
+		dispatch({ type: '[Cart] - Change cart quantity', payload: product });
+	};
+
+	const removeCartProduct = (product: ICartProduct) => {
+		dispatch({ type: '[Cart] - Remove product in cart', payload: product });
 	};
 
 	return (
 		<CartContext.Provider
 			value={{
 				...state,
-				addProductToCar,
+
+				// Methods
+				addProductToCart,
+				removeCartProduct,
+				updateCartQuantity,
 			}}>
 			{children}
 		</CartContext.Provider>

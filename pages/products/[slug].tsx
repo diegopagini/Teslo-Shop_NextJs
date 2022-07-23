@@ -18,7 +18,7 @@ interface Props {
 const ProductPage: NextPage<Props> = ({ product }) => {
 	const router = useRouter();
 
-	const { addProductToCar } = useContext(CartContext);
+	const { addProductToCart } = useContext(CartContext);
 
 	const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
 		_id: product._id,
@@ -45,7 +45,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 		if (!tempCartProduct.size) {
 			return;
 		}
-		addProductToCar(tempCartProduct);
+		addProductToCart(tempCartProduct);
 		router.push('/cart');
 	};
 
@@ -70,7 +70,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 
 							<ItemCounter
 								currentValue={tempCartProduct.quantity}
-								updateQuantity={(value) => onUpdateQuantity(value)}
+								updatedQuantity={(value: number) => onUpdateQuantity(value)}
 								maxValue={product.inStock > 5 ? 5 : product.inStock}
 							/>
 

@@ -1,4 +1,4 @@
 /** @format */
 
-export * from './CardList';
+export * from './CartList';
 export * from './OrderSummary';
