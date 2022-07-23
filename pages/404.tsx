@@ -1,9 +1,10 @@
 /** @format */
 import { Box, Typography } from '@mui/material';
+import { NextPage } from 'next';
 
 import { ShopLayout } from '../components/layouts';
 
-const NotFoundPage = () => {
+const NotFoundPage: NextPage = () => {
 	return (
 		<ShopLayout
 			title='Page not found'

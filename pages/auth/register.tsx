@@ -1,10 +1,11 @@
 /** @format */
 import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { NextPage } from 'next';
 import NextLink from 'next/link';
 
 import { AuthLayout } from '../../components/layouts';
 
-const RegisterPage = () => {
+const RegisterPage: NextPage = () => {
 	return (
 		<AuthLayout title='Ingresar'>
 			<Box sx={{ width: 350, padding: '10px 20px' }}>
@@ -24,19 +25,10 @@ const RegisterPage = () => {
 					</Grid>
 
 					<Grid item xs={12}>
-						<TextField
-							label='Contraseña'
-							type='password'
-							variant='filled'
-							fullWidth
-						/>
+						<TextField label='Contraseña' type='password' variant='filled' fullWidth />
 					</Grid>
 					<Grid item xs={12}>
-						<Button
-							color='secondary'
-							className='circular-btn'
-							size='large'
-							fullWidth>
+						<Button color='secondary' className='circular-btn' size='large' fullWidth>
 							Crear
 						</Button>
 					</Grid>

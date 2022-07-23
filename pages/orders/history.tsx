@@ -1,6 +1,7 @@
 /** @format */
 import { Chip, Grid, Link, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { NextPage } from 'next';
 import NextLink from 'next/link';
 
 import { ShopLayout } from '../../components/layouts';
@@ -72,23 +73,16 @@ const rows = [
 	},
 ];
 
-const HistoryPage = () => {
+const HistoryPage: NextPage = () => {
 	return (
-		<ShopLayout
-			title='Historial de ordenes'
-			pageDescription='Historial de ordenes del cliente'>
+		<ShopLayout title='Historial de ordenes' pageDescription='Historial de ordenes del cliente'>
 			<Typography variant='h1' component='h1'>
 				Historial de ordenes
 			</Typography>
 
 			<Grid container>
 				<Grid item xs={12} sx={{ height: 650, width: '100%' }}>
-					<DataGrid
-						rows={rows}
-						columns={columns}
-						pageSize={10}
-						rowsPerPageOptions={[10]}
-					/>
+					<DataGrid rows={rows} columns={columns} pageSize={10} rowsPerPageOptions={[10]} />
 				</Grid>
 			</Grid>
 		</ShopLayout>

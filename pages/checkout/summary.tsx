@@ -1,11 +1,12 @@
 /** @format */
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material';
+import { NextPage } from 'next';
 import NextLink from 'next/link';
 
 import { CartList, OrderSummary } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts';
 
-const SummaryPage = () => {
+const SummaryPage: NextPage = () => {
 	return (
 		<ShopLayout title='Resumen de Orden' pageDescription='Resumen de la Orden'>
 			<Typography variant='h1' component='h1'>

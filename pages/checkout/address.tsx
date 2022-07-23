@@ -1,9 +1,10 @@
 /** @format */
 import { Box, Button, FormControl, Grid, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { NextPage } from 'next';
 
 import { ShopLayout } from '../../components/layouts';
 
-const AdressPage = () => {
+const AdressPage: NextPage = () => {
 	return (
 		<ShopLayout
 			title='Dirección'

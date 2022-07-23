@@ -1,12 +1,13 @@
 /** @format */
 import { CreditScoreOutlined } from '@mui/icons-material';
 import { Box, Card, CardContent, Chip, Divider, Grid, Link, Typography } from '@mui/material';
+import { NextPage } from 'next';
 import NextLink from 'next/link';
 
 import { CartList, OrderSummary } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts';
 
-const OrderPage = () => {
+const OrderPage: NextPage = () => {
 	return (
 		<ShopLayout title='Resumen de Orden 123123' pageDescription='Resumen de la Orden'>
 			<Typography variant='h1' component='h1'>
