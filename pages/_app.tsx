@@ -4,11 +4,11 @@ import '../styles/globals.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { SWRConfig } from 'swr';
 
-import { CartProvider, UiProvider } from '../context';
-import { AuthProvider } from '../context/auth/AuthProvider';
+import { AuthProvider, CartProvider, UiProvider } from '../context';
 import { lightTheme } from '../themes/light-theme';
 
 import type { AppProps } from 'next/app';
+
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<SWRConfig

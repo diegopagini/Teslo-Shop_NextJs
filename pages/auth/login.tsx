@@ -3,11 +3,12 @@ import { ErrorOutline } from '@mui/icons-material';
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
 import { NextPage } from 'next';
 import NextLink from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { tesloApi } from '../../api';
 import { AuthLayout } from '../../components/layouts';
+import { AuthContext } from '../../context';
 import { validations } from '../../utils';
 
 interface FormData {
@@ -16,27 +17,30 @@ interface FormData {
 }
 
 const LoginPage: NextPage = () => {
+	const { loginUser } = useContext(AuthContext);
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<FormData>(); // manejador de formularios de react-hook-form
+	const router = useRouter();
 
 	const [showError, setShowError] = useState(false);
-
 	const onLoginUser = async ({ email, password }: FormData) => {
 		setShowError(false);
 
-		try {
-			const { data } = await tesloApi.post('/user/login', { email, password });
-			const { token, user } = data;
-		} catch (error) {
+		const isValidLogin = await loginUser(email, password);
+
+		if (!isValidLogin) {
 			setShowError(true);
 			setTimeout(() => {
 				setShowError(false);
 			}, 3000);
-			console.log('Error en las credenciales');
+			return;
 		}
+
+		router.replace('/'); // Replace reemplaza la pagina donde se econtraba por la nueva
+		// En cambio push lo envia a la nueva y guarda en el historial la anterior.
 	};
 
 	return (
