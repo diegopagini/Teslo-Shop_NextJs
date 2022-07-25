@@ -1,7 +1,7 @@
 /** @format */
 import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { FC, useEffect, useReducer } from 'react';
 
@@ -93,7 +93,6 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 	};
 
 	const logout = () => {
-		Cookies.remove('token');
 		Cookies.remove('cart');
 		Cookies.remove('firstName');
 		Cookies.remove('lastName');
@@ -103,7 +102,8 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 		Cookies.remove('city');
 		Cookies.remove('country');
 		Cookies.remove('phone');
-		router.reload();
+		// Cookies.remove('token');
+		signOut();
 	};
 
 	return (
