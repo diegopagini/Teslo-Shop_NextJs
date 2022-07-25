@@ -3,9 +3,11 @@ import { Box, Button, FormControl, Grid, MenuItem, TextField, Typography } from 
 import Cookie from 'js-cookie';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { ShopLayout } from '../../components/layouts';
+import { CartContext } from '../../context';
 import { countries, jwt } from '../../utils';
 
 type FormData = {
@@ -34,6 +36,8 @@ const getAddressFromCookies = (): FormData => {
 };
 
 const AdressPage: NextPage = () => {
+	const { updateAddress } = useContext(CartContext);
+
 	const {
 		register,
 		handleSubmit,
@@ -45,15 +49,7 @@ const AdressPage: NextPage = () => {
 	const router = useRouter();
 
 	const onSubmitAddress = (data: FormData) => {
-		Cookie.set('firstName', data.firstName);
-		Cookie.set('lastName', data.lastName);
-		Cookie.set('address', data.address);
-		Cookie.set('address2', data.address2 || '');
-		Cookie.set('zip', data.zip);
-		Cookie.set('city', data.city);
-		Cookie.set('country', data.country);
-		Cookie.set('phone', data.phone);
-
+		updateAddress(data);
 		router.push('/checkout/summary');
 	};
 
