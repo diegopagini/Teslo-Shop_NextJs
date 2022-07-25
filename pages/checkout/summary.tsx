@@ -2,12 +2,20 @@
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material';
 import { GetServerSideProps, NextPage } from 'next';
 import NextLink from 'next/link';
+import { useContext } from 'react';
 
 import { CartList, OrderSummary } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts';
-import { jwt } from '../../utils';
+import { CartContext } from '../../context';
+import { countries, jwt } from '../../utils';
 
 const SummaryPage: NextPage = () => {
+	const { shippingAddress, numberOfItems } = useContext(CartContext);
+
+	if (!shippingAddress) return <></>;
+
+	const { firstName, lastName, address, address2, city, country, phone, zip } = shippingAddress;
+
 	return (
 		<ShopLayout title='Resumen de Orden' pageDescription='Resumen de la Orden'>
 			<Typography variant='h1' component='h1'>
@@ -20,7 +28,9 @@ const SummaryPage: NextPage = () => {
 				<Grid item xs={12} sm={5}>
 					<Card className='summary-card'>
 						<CardContent>
-							<Typography variant='h2'>Resumen (3 productos)</Typography>
+							<Typography variant='h2'>
+								Resumen ({numberOfItems} {numberOfItems === 0 ? 'producto' : 'productos'})
+							</Typography>
 							<Divider sx={{ my: 1 }} />
 
 							<Box display='flex' justifyContent='space-between'>
@@ -30,10 +40,16 @@ const SummaryPage: NextPage = () => {
 								</NextLink>
 							</Box>
 
-							<Typography>Diego Pagini</Typography>
-							<Typography>Algun Lugar</Typography>
-							<Typography>29640</Typography>
-							<Typography>España</Typography>
+							<Typography>
+								{firstName} {lastName}
+							</Typography>
+							<Typography>
+								{address} {address2 ? `, ${address2}` : ''}
+							</Typography>
+							<Typography>{city}</Typography>
+							<Typography>{zip}</Typography>
+							<Typography>{countries.find((c) => c.code === country)?.name}</Typography>
+							<Typography>{phone}</Typography>
 
 							<Divider sx={{ my: 2 }} />
 
