@@ -39,7 +39,8 @@ const LoginPage: NextPage = () => {
 			return;
 		}
 
-		router.replace('/'); // Replace reemplaza la pagina donde se econtraba por la nueva
+		const destination = router.query.p?.toString() || '/';
+		router.replace(destination); // Replace reemplaza la pagina donde se econtraba por la nueva
 		// En cambio push lo envia a la nueva y guarda en el historial la anterior.
 	};
 
@@ -102,7 +103,9 @@ const LoginPage: NextPage = () => {
 						</Grid>
 
 						<Grid item xs={12} display='flex' justifyContent='end'>
-							<NextLink href='/auth/register' passHref>
+							<NextLink
+								href={router.query.p ? `/auth/register?p=${router.query.p}` : '/auth/register'}
+								passHref>
 								<Link underline='always'>¿No tienes cuenta aún?</Link>
 							</NextLink>
 						</Grid>
