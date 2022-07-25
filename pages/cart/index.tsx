@@ -15,6 +15,10 @@ const CartPage = () => {
 		if (isLoaded && cart.length === 0) router.replace('/cart/empty');
 	}, [isLoaded, cart, router]);
 
+	const navigateToCheckout = () => {
+		router.push('/checkout/address');
+	};
+
 	if (!isLoaded || cart.length === 0) return <></>;
 
 	return (
@@ -35,7 +39,11 @@ const CartPage = () => {
 							<Divider sx={{ my: 1 }} />
 							<OrderSummary />
 							<Box sx={{ mt: 3 }}>
-								<Button color='secondary' className='circular-btn' fullWidth>
+								<Button
+									color='secondary'
+									className='circular-btn'
+									fullWidth
+									onClick={navigateToCheckout}>
 									Checkout
 								</Button>
 							</Box>
