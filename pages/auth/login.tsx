@@ -1,7 +1,8 @@
 /** @format */
 import { ErrorOutline } from '@mui/icons-material';
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
+import { getSession, signIn } from 'next-auth/react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
@@ -26,22 +27,28 @@ const LoginPage: NextPage = () => {
 	const router = useRouter();
 
 	const [showError, setShowError] = useState(false);
+
 	const onLoginUser = async ({ email, password }: FormData) => {
 		setShowError(false);
 
-		const isValidLogin = await loginUser(email, password);
+		// const isValidLogin = await loginUser(email, password);
 
-		if (!isValidLogin) {
-			setShowError(true);
-			setTimeout(() => {
-				setShowError(false);
-			}, 3000);
-			return;
-		}
+		// if (!isValidLogin) {
+		// 	setShowError(true);
+		// 	setTimeout(() => {
+		// 		setShowError(false);
+		// 	}, 3000);
+		// 	return;
+		// }
 
-		const destination = router.query.p?.toString() || '/';
-		router.replace(destination); // Replace reemplaza la pagina donde se econtraba por la nueva
-		// En cambio push lo envia a la nueva y guarda en el historial la anterior.
+		// const destination = router.query.p?.toString() || '/';
+		// router.replace(destination); // Replace reemplaza la pagina donde se econtraba por la nueva
+		// // En cambio push lo envia a la nueva y guarda en el historial la anterior.
+
+		await signIn('credentials', {
+			email,
+			password,
+		});
 	};
 
 	return (
@@ -114,6 +121,27 @@ const LoginPage: NextPage = () => {
 			</form>
 		</AuthLayout>
 	);
+};
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+	const session = await getSession({ req });
+
+	const { p = '/' } = query;
+
+	if (session) {
+		return {
+			redirect: {
+				destination: p.toString(),
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: {},
+	};
 };
 
 export default LoginPage;

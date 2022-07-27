@@ -27,8 +27,20 @@ export default NextAuth({
 		}),
 	],
 
+	// custom pages
+	pages: {
+		signIn: '/auth/login',
+		newUser: '/auth/register',
+	},
+
 	jwt: {
 		// if using `NEXTAUTH_SECRET` env variable, we detect it, and you won't actually need to `secret`
+	},
+
+	session: {
+		maxAge: 2592000, // 30 días
+		strategy: 'jwt',
+		updateAge: 86400, // cada día
 	},
 
 	// Callbacks
@@ -43,6 +55,7 @@ export default NextAuth({
 						break;
 
 					case 'oauth':
+						token.user = await dbUsers.oAuthToDbUser(user?.email || '', user?.name || '');
 						break;
 				}
 			}
