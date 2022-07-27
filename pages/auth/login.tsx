@@ -1,15 +1,14 @@
 /** @format */
 import { ErrorOutline } from '@mui/icons-material';
-import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, Divider, Grid, Link, TextField, Typography } from '@mui/material';
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession, signIn } from 'next-auth/react';
+import { getProviders, getSession, signIn } from 'next-auth/react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { AuthLayout } from '../../components/layouts';
-import { AuthContext } from '../../context';
 import { validations } from '../../utils';
 
 interface FormData {
@@ -18,7 +17,6 @@ interface FormData {
 }
 
 const LoginPage: NextPage = () => {
-	const { loginUser } = useContext(AuthContext);
 	const {
 		register,
 		handleSubmit,
@@ -27,6 +25,14 @@ const LoginPage: NextPage = () => {
 	const router = useRouter();
 
 	const [showError, setShowError] = useState(false);
+
+	const [providers, setProviders] = useState<any>({});
+
+	useEffect(() => {
+		getProviders().then((prov) => {
+			setProviders(prov);
+		});
+	}, []);
 
 	const onLoginUser = async ({ email, password }: FormData) => {
 		setShowError(false);
@@ -115,6 +121,26 @@ const LoginPage: NextPage = () => {
 								passHref>
 								<Link underline='always'>¿No tienes cuenta aún?</Link>
 							</NextLink>
+						</Grid>
+
+						{/* {Login de terceros} */}
+						<Grid item xs={12} display='flex' flexDirection='column' justifyContent='end'>
+							<Divider sx={{ width: '100%', mb: 2 }} />
+							{Object.values(providers).map((provider: any) => {
+								if (provider.id === 'credentials') return <div key='credentials'></div>; // no mostramos nada
+
+								return (
+									<Button
+										key={provider.id}
+										variant='outlined'
+										fullWidth
+										color='primary'
+										sx={{ mb: 1 }}
+										onClick={() => signIn(provider.id)}>
+										{provider.name}
+									</Button>
+								);
+							})}
 						</Grid>
 					</Grid>
 				</Box>

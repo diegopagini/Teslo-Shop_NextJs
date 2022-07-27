@@ -1,16 +1,24 @@
 /** @format */
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material';
+import Cookies from 'js-cookie';
 import { GetServerSideProps, NextPage } from 'next';
 import NextLink from 'next/link';
-import { useContext } from 'react';
+import { useRouter } from 'next/router';
+import { useContext, useEffect } from 'react';
 
 import { CartList, OrderSummary } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts';
 import { CartContext } from '../../context';
-import { countries, jwt } from '../../utils';
+import { jwt } from '../../utils';
 
 const SummaryPage: NextPage = () => {
 	const { shippingAddress, numberOfItems } = useContext(CartContext);
+	const router = useRouter();
+	useEffect(() => {
+		if (!Cookies.get('firstName')) {
+			router.push('/checkout/address');
+		}
+	}, [router]);
 
 	if (!shippingAddress) return <></>;
 
@@ -48,7 +56,7 @@ const SummaryPage: NextPage = () => {
 							</Typography>
 							<Typography>{city}</Typography>
 							<Typography>{zip}</Typography>
-							<Typography>{countries.find((c) => c.code === country)?.name}</Typography>
+							<Typography>{country}</Typography>
 							<Typography>{phone}</Typography>
 
 							<Divider sx={{ my: 2 }} />
@@ -87,7 +95,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 	if (!isValidToken) {
 		return {
 			redirect: {
-				destination: '/auth/login?p=/checkout/summary',
+				destination: '/auth/login?p=/checkout/address',
 				permanent: false,
 			},
 		};

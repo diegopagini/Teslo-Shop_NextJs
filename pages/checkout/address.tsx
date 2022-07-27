@@ -1,14 +1,14 @@
 /** @format */
-import { Box, Button, FormControl, Grid, MenuItem, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControl, Grid, TextField, Typography } from '@mui/material';
 import Cookie from 'js-cookie';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { ShopLayout } from '../../components/layouts';
 import { CartContext } from '../../context';
-import { countries, jwt } from '../../utils';
+import { jwt } from '../../utils';
 
 type FormData = {
 	firstName: string;
@@ -42,9 +42,23 @@ const AdressPage: NextPage = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	} = useForm<FormData>({
-		defaultValues: getAddressFromCookies(),
+		defaultValues: {
+			firstName: '',
+			lastName: '',
+			address: '',
+			address2: '',
+			zip: '',
+			city: '',
+			country: '',
+			phone: '',
+		},
 	});
+
+	useEffect(() => {
+		reset(getAddressFromCookies());
+	}, [reset]);
 
 	const router = useRouter();
 
@@ -107,20 +121,21 @@ const AdressPage: NextPage = () => {
 					<Grid item xs={12} sm={6}>
 						<FormControl fullWidth>
 							<TextField
-								select
+								// select
 								variant='filled'
 								label='País'
-								defaultValue={Cookie.get('country') || 'ESP'}
+								fullWidth
+								// defaultValue={Cookie.get('country') || 'ESP'}
 								{...register('country', {
 									required: 'Este campo es requerido',
 								})}
 								error={!!errors.country}
 								helperText={errors.country?.message}>
-								{countries.map((country) => (
+								{/* {countries.map((country) => (
 									<MenuItem value={country.code} key={country.code}>
 										{country.name}
 									</MenuItem>
-								))}
+								))} */}
 							</TextField>
 						</FormControl>
 					</Grid>
