@@ -1,7 +1,7 @@
 /** @format */
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material';
 import Cookies from 'js-cookie';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
@@ -9,16 +9,19 @@ import { useContext, useEffect } from 'react';
 import { CartList, OrderSummary } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts';
 import { CartContext } from '../../context';
-import { jwt } from '../../utils';
 
 const SummaryPage: NextPage = () => {
-	const { shippingAddress, numberOfItems } = useContext(CartContext);
+	const { shippingAddress, numberOfItems, createOrder } = useContext(CartContext);
 	const router = useRouter();
 	useEffect(() => {
 		if (!Cookies.get('firstName')) {
 			router.push('/checkout/address');
 		}
 	}, [router]);
+
+	const onCreateOrder = () => {
+		createOrder();
+	};
 
 	if (!shippingAddress) return <></>;
 
@@ -69,7 +72,11 @@ const SummaryPage: NextPage = () => {
 							<OrderSummary />
 
 							<Box sx={{ mt: 3 }}>
-								<Button color='secondary' className='circular-btn' fullWidth>
+								<Button
+									color='secondary'
+									className='circular-btn'
+									fullWidth
+									onClick={onCreateOrder}>
 									Confirmar Orden
 								</Button>
 							</Box>
@@ -79,31 +86,6 @@ const SummaryPage: NextPage = () => {
 			</Grid>
 		</ShopLayout>
 	);
-};
-
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-	const { token = '' } = req.cookies;
-	let isValidToken = false;
-
-	try {
-		await jwt.isValidToken(token);
-		isValidToken = true;
-	} catch (error) {
-		isValidToken = false;
-	}
-
-	if (!isValidToken) {
-		return {
-			redirect: {
-				destination: '/auth/login?p=/checkout/address',
-				permanent: false,
-			},
-		};
-	}
-
-	return {
-		props: {},
-	};
 };
 
 export default SummaryPage;

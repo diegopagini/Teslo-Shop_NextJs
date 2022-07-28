@@ -1,14 +1,13 @@
 /** @format */
 import { Box, Button, FormControl, Grid, TextField, Typography } from '@mui/material';
 import Cookie from 'js-cookie';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { ShopLayout } from '../../components/layouts';
 import { CartContext } from '../../context';
-import { jwt } from '../../utils';
 
 type FormData = {
 	firstName: string;
@@ -190,29 +189,29 @@ const AdressPage: NextPage = () => {
 // You should use getServerSideProps when:
 // - Only if you need to pre-render a page whose data must be fetched at request time
 // En versiones anteriores a la 12 de Next esta era la única forma de validad desde el lado del servidor.
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-	const { token = '' } = req.cookies;
-	let isValidToken = false;
+// export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+// 	const { token = '' } = req.cookies;
+// 	let isValidToken = false;
 
-	try {
-		await jwt.isValidToken(token);
-		isValidToken = true;
-	} catch (error) {
-		isValidToken = false;
-	}
+// 	try {
+// 		await jwt.isValidToken(token);
+// 		isValidToken = true;
+// 	} catch (error) {
+// 		isValidToken = false;
+// 	}
 
-	if (!isValidToken) {
-		return {
-			redirect: {
-				destination: '/auth/login?p=/checkout/address',
-				permanent: false,
-			},
-		};
-	}
+// 	if (!isValidToken) {
+// 		return {
+// 			redirect: {
+// 				destination: '/auth/login?p=/checkout/address',
+// 				permanent: false,
+// 			},
+// 		};
+// 	}
 
-	return {
-		props: {},
-	};
-};
+// 	return {
+// 		props: {},
+// 	};
+// };
 
 export default AdressPage;

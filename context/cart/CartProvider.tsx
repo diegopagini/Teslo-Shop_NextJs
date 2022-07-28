@@ -2,6 +2,7 @@
 import Cookie from 'js-cookie';
 import { FC, useEffect, useReducer } from 'react';
 
+import { tesloApi } from '../../api';
 import { ICartProduct, ShippingAddress } from '../../interfaces';
 import { CartContext, cartReducer } from './';
 
@@ -132,16 +133,24 @@ export const CartProvider: FC<Props> = ({ children }) => {
 		dispatch({ type: '[Cart] - Update address', payload: address });
 	};
 
+	const createOrder = async () => {
+		try {
+			const { data } = await tesloApi.post('/orders', {});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<CartContext.Provider
 			value={{
 				...state,
-
 				// Methods
 				addProductToCart,
 				removeCartProduct,
 				updateCartQuantity,
 				updateAddress,
+				createOrder,
 			}}>
 			{children}
 		</CartContext.Provider>
