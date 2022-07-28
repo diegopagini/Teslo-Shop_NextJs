@@ -1,6 +1,7 @@
 /** @format */
 import { CreditCardOutlined, CreditScoreOutlined } from '@mui/icons-material';
 import { Box, Card, CardContent, Chip, Divider, Grid, Typography } from '@mui/material';
+import { PayPalButtons } from '@paypal/react-paypal-js';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 
@@ -89,7 +90,22 @@ const OrderPage: NextPage<Props> = ({ order }) => {
 										icon={<CreditScoreOutlined />}
 									/>
 								) : (
-									<h1>Pagar</h1>
+									<PayPalButtons
+										createOrder={(data, actions) => {
+											return actions.order.create({
+												purchase_units: [
+													{
+														amount: {
+															value: order.total.toString(),
+														},
+													},
+												],
+											});
+										}}
+										onApprove={(data, actions) => {
+											return actions.order!.capture().then((details) => {});
+										}}
+									/>
 								)}
 							</Box>
 						</CardContent>
