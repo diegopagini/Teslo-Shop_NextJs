@@ -1,4 +1,5 @@
 /** @format */
+import { ISize } from './products.interface';
 import { IUser } from './user.interface';
 
 export interface IOrder {
@@ -18,11 +19,12 @@ export interface IOrder {
 export interface IOrderItem {
 	_id: string;
 	title: string;
-	size: string;
+	size: ISize;
 	quantity: number;
 	slug: string;
 	image: string;
 	price: number;
+	gender: string;
 }
 
 export interface ShippingAddress {
