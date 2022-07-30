@@ -25,7 +25,7 @@ import { useForm } from 'react-hook-form';
 
 import { AdminLayout } from '../../../components/layouts';
 import { dbProducts } from '../../../database';
-import { IProduct, ISize, IType } from '../../../interfaces';
+import { IProduct, IType } from '../../../interfaces';
 
 const validTypes = ['shirts', 'pants', 'hoodies', 'hats'];
 const validGender = ['men', 'women', 'kid', 'unisex'];
@@ -37,7 +37,7 @@ interface FormData {
 	images: string[];
 	inStock: number;
 	price: number;
-	sizes: ISize[];
+	sizes: string[];
 	slug: string;
 	tags: string[];
 	title: string;
@@ -62,6 +62,19 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
 	const onSubmit = (form: FormData) => {
 		console.log({ form });
+	};
+
+	const onChangeSizes = (size: string) => {
+		const currentSizes = getValues('sizes');
+		if (currentSizes.includes(size)) {
+			return setValue(
+				'sizes',
+				currentSizes.filter((s) => s !== size),
+				{ shouldValidate: true }
+			);
+		}
+
+		setValue('sizes', [...currentSizes, size], { shouldValidate: true });
 	};
 
 	const onDeleteTag = (tag: string) => {};
@@ -180,7 +193,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 						<FormGroup>
 							<FormLabel>Tallas</FormLabel>
 							{validSizes.map((size) => (
-								<FormControlLabel key={size} control={<Checkbox />} label={size} />
+								<FormControlLabel
+									key={size}
+									control={<Checkbox checked={getValues('sizes').includes(size)} />}
+									label={size}
+									onChange={() => onChangeSizes(size)}
+								/>
 							))}
 						</FormGroup>
 					</Grid>
