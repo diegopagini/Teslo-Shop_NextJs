@@ -41,8 +41,8 @@ interface FormData {
 	slug: string;
 	tags: string[];
 	title: string;
-	type: IType;
-	gender: 'men' | 'women' | 'kid' | 'unisex';
+	type: IType | string;
+	gender: 'men' | 'women' | 'kid' | 'unisex' | string;
 }
 
 interface Props {
@@ -54,6 +54,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		getValues,
+		setValue,
 	} = useForm<FormData>({
 		defaultValues: product,
 	});
@@ -143,9 +145,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 							<FormLabel>Tipo</FormLabel>
 							<RadioGroup
 								row
-								// value={ status }
-								// onChange={ onStatusChanged }
-							>
+								value={getValues('type')}
+								onChange={({ target }) => setValue('type', target.value, { shouldValidate: true })}>
 								{validTypes.map((option) => (
 									<FormControlLabel
 										key={option}
@@ -161,9 +162,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 							<FormLabel>Género</FormLabel>
 							<RadioGroup
 								row
-								// value={ status }
-								// onChange={ onStatusChanged }
-							>
+								value={getValues('gender')}
+								onChange={({ target }) =>
+									setValue('gender', target.value, { shouldValidate: true })
+								}>
 								{validGender.map((option) => (
 									<FormControlLabel
 										key={option}
