@@ -25,7 +25,7 @@
 		"react": "17.0.2",
 		"react-dom": "17.0.2",
 		"react-hook-form": "^7.27.1",
-		"react-slideshow-image": "^3.7.0",
+		"react-slideshow-image": "^4.0.4",
 		"swr": "^1.2.1"
 	},
 	"devDependencies": {
