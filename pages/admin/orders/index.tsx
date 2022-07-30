@@ -5,8 +5,8 @@ import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { NextPage } from 'next';
 import useSWR from 'swr';
 
-import { AdminLayout } from '../../components/layouts';
-import { IOrder, IUser } from '../../interfaces';
+import { AdminLayout } from '../../../components/layouts';
+import { IOrder, IUser } from '../../../interfaces';
 
 const columns: GridColDef[] = [
 	{
