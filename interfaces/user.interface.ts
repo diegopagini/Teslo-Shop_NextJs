@@ -5,7 +5,7 @@ export interface IUser {
 	name: string;
 	email: string;
 	password?: string;
-	role: 'admin' | 'client';
+	role: string; // admin, client, super-user, SEO
 	createdAt?: string;
 	updatedAt?: string;
 }

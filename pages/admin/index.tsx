@@ -37,7 +37,12 @@ const DashboardPage: NextPage = () => {
 
 	if (!error && !data)
 		return (
-			<Box height='100vh' display='flex' justifyContent='center' className='fadeIn'>
+			<Box
+				height='100vh'
+				display='flex'
+				justifyContent='center'
+				alignItems='center'
+				className='fadeIn'>
 				<CircularProgress />
 			</Box>
 		);
