@@ -1,6 +1,6 @@
 /** @format */
 import { AddOutlined, CategoryOutlined } from '@mui/icons-material';
-import { Box, Button, CardMedia, Grid, Link } from '@mui/material';
+import { Box, Button, CardMedia, CircularProgress, Grid, Link, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import NextLink from 'next/link';
 import useSWR from 'swr';
@@ -42,7 +42,23 @@ const columns: GridColDef[] = [
 const ProductsPage = () => {
 	const { data, error } = useSWR<IProduct[]>('/api/admin/products');
 
-	if (!data && !error) return <></>;
+	if (!error && !data) {
+		return (
+			<Box
+				height='100vh'
+				display='flex'
+				justifyContent='center'
+				alignItems='center'
+				className='fadeIn'>
+				<CircularProgress />
+			</Box>
+		);
+	}
+
+	if (error) {
+		console.log(error);
+		return <Typography>Error al cargar la información</Typography>;
+	}
 
 	const rows = data!.map((product) => ({
 		id: product._id,

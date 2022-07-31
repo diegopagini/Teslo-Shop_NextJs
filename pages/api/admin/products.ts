@@ -64,13 +64,12 @@ const updateProduct = async (req: NextApiRequest, res: NextApiResponse<Data>) =>
 			return res.status(400).json({ message: 'No existe un producto con ese ID' });
 		}
 
-		// TODO: eliminar fotos en Cloudinary
-		// https://res.cloudinary.com/cursos-udemy/image/upload/v1645914028/nct31gbly4kde6cncc6i.jpg
-		product.images.forEach(async (image) => {
+		// Eliminar fotos en Cloudinary
+		product.images.forEach(async (image: string) => {
 			if (!images.includes(image)) {
 				// Borrar de cloudinary
-				const [fileId, extension] = image.substring(image.lastIndexOf('/') + 1).split('.');
-				console.log({ image, fileId, extension });
+				const [fileId, extension] = image.substring(image.lastIndexOf('/') + 1).split('.'); // lastIndexOf para encontrar el
+				// último "/" del path.
 				await cloudinary.uploader.destroy(fileId);
 			}
 		});

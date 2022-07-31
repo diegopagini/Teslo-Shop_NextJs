@@ -141,13 +141,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 		setIsSaving(true);
 
 		try {
-			const { data } = await tesloApi({
+			await tesloApi({
 				url: '/admin/products',
 				method: form._id ? 'PUT' : 'POST', // si tenemos un _id, entonces actualizar, si no, crear
 				data: form,
 			});
 
-			console.log({ data });
 			if (!form._id) {
 				router.replace(`/admin/products/${form.slug}`);
 			} else {
