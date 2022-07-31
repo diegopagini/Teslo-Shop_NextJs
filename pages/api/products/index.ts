@@ -7,10 +7,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 type Data = { message: string } | IProduct[];
 
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<Data>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
 	switch (req.method) {
 		case 'GET':
 			return getProducts(req, res);
@@ -44,5 +41,13 @@ const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 	 */
 	await db.disconnect();
 
-	return res.status(200).json(products);
+	const updatedProducts = products.map((product) => {
+		product.images = product.images.map((img: string) =>
+			img.includes('http') ? img : `${process.env.HOST_NAME}products/${img}`
+		);
+
+		return product;
+	});
+
+	return res.status(200).json(updatedProducts);
 };

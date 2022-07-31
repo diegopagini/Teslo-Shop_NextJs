@@ -7,10 +7,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 type Data = { message: string } | IProduct;
 
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<Data>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
 	switch (req.method) {
 		case 'GET':
 			return getProductBySlug(req, res);
@@ -22,17 +19,17 @@ export default async function handler(
 	}
 }
 
-const getProductBySlug = async (
-	req: NextApiRequest,
-	res: NextApiResponse<Data>
-) => {
+const getProductBySlug = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 	await db.connect();
 	const { slug } = req.query;
 	const product = await Product.findOne({ slug }).lean();
 	await db.disconnect();
 
-	if (!product)
-		return res.status(404).json({ message: `Producto no encontrado` });
+	if (!product) return res.status(404).json({ message: `Producto no encontrado` });
+
+	product.images = product.images.map((img: string) => {
+		return img.includes('http') ? img : `${process.env.HOST_NAME}products/${img}`;
+	});
 
 	return res.json(product);
 };
