@@ -1,9 +1,7 @@
 /** @format */
-import { CategoryOutlined } from '@mui/icons-material';
-import { Box, Card, CircularProgress, Grid, Link, Typography } from '@mui/material';
+import { AddOutlined, CategoryOutlined } from '@mui/icons-material';
+import { Box, Button, CardMedia, Grid, Link } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { NextPage } from 'next';
-import Image from 'next/image';
 import NextLink from 'next/link';
 import useSWR from 'swr';
 
@@ -13,13 +11,11 @@ import { IProduct } from '../../../interfaces';
 const columns: GridColDef[] = [
 	{
 		field: 'img',
-		headerName: 'Imagen',
+		headerName: 'Foto',
 		renderCell: ({ row }: GridValueGetterParams) => {
 			return (
 				<a href={`/product/${row.slug}`} target='_blank' rel='noreferrer'>
-					<Card>
-						<Image src={`/products/${row.img}`} alt={row.title} width={100} height={100} />
-					</Card>
+					<CardMedia component='img' alt={row.title} className='fadeIn' image={row.img} />
 				</a>
 			);
 		},
@@ -36,53 +32,19 @@ const columns: GridColDef[] = [
 			);
 		},
 	},
-	{
-		field: 'gender',
-		headerName: 'Género',
-	},
-	{
-		field: 'type',
-		headerName: 'Tipo',
-	},
-	{
-		field: 'inStock',
-		headerName: 'Inventario',
-		align: 'center',
-	},
-	{
-		field: 'price',
-		headerName: 'Precio',
-		align: 'center',
-	},
-	{
-		field: 'sizes',
-		headerName: 'Tallas',
-		width: 250,
-	},
+	{ field: 'gender', headerName: 'Género' },
+	{ field: 'type', headerName: 'Tipo' },
+	{ field: 'inStock', headerName: 'Inventario' },
+	{ field: 'price', headerName: 'Precio' },
+	{ field: 'sizes', headerName: 'Tallas', width: 250 },
 ];
 
-const ProductsPage: NextPage = () => {
+const ProductsPage = () => {
 	const { data, error } = useSWR<IProduct[]>('/api/admin/products');
 
-	if (!error && !data) {
-		return (
-			<Box
-				height='100vh'
-				display='flex'
-				justifyContent='center'
-				alignItems='center'
-				className='fadeIn'>
-				<CircularProgress />
-			</Box>
-		);
-	}
+	if (!data && !error) return <></>;
 
-	if (error) {
-		console.log(error);
-		return <Typography>Error al cargar la información</Typography>;
-	}
-
-	const rows = data!.map((product: IProduct) => ({
+	const rows = data!.map((product) => ({
 		id: product._id,
 		img: product.images[0],
 		title: product.title,
@@ -96,9 +58,15 @@ const ProductsPage: NextPage = () => {
 
 	return (
 		<AdminLayout
-			title={`Productos (${data?.length || 0})`}
+			title={`Productos (${data?.length})`}
 			subtitle={'Mantenimiento de productos'}
 			icon={<CategoryOutlined />}>
+			<Box display='flex' justifyContent='end' sx={{ mb: 2 }}>
+				<Button startIcon={<AddOutlined />} color='secondary' href='/admin/products/new'>
+					Crear producto
+				</Button>
+			</Box>
+
 			<Grid container className='fadeIn'>
 				<Grid item xs={12} sx={{ height: 650, width: '100%' }}>
 					<DataGrid rows={rows} columns={columns} pageSize={10} rowsPerPageOptions={[10]} />
