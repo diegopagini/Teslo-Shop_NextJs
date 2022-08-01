@@ -1,6 +1,5 @@
 /** @format */
 import {
-  AccountCircleOutlined,
   AdminPanelSettings,
   CategoryOutlined,
   ConfirmationNumberOutlined,
@@ -74,12 +73,12 @@ export const SideMenu = () => {
 					</ListItem>
 					{isLoggedIn && (
 						<>
-							<ListItem button>
+							{/* <ListItem button>
 								<ListItemIcon>
 									<AccountCircleOutlined />
 								</ListItemIcon>
 								<ListItemText primary={'Perfil'} />
-							</ListItem>
+							</ListItem> */}
 
 							<ListItem button onClick={() => navigateTo('/orders/history')}>
 								<ListItemIcon>
